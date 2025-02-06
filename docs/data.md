@@ -250,3 +250,6 @@ User {
 *Almacenan varios valores que tienen el mismo tipo de datos. A diferencia de las matrices, el tamaño o la longitud de un vector puede aumentar o reducirse en cualquier momento. La capacidad de cambiar el tamaño con el tiempo está implícita en tiempo de compilación. Por lo tanto, Rust no puede impedir que se acceda a una posición no válida en el vector como lo hace para el acceso en matrices fuera de los límites.*
 - Una manera común de declarar e inicializar un vector es con la macro vec!.
 #### [3.3. `if`/`else`](../src/if-else/src/main.rs)
+
+### 4. Bucles
+#### [4.1. Mapas hash](../src/hashmap/src/main.rs)
