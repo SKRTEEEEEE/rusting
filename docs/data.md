@@ -246,6 +246,7 @@ User {
 ### 3. Condiciones
 #### [3.1. Matrices](../src/matriz/src/main.rs) 
 *Colección de objetos del mismo tipo, que se almacenan secuencial-mente en la memoria. La longitud o tamaño de una matriz es igual al número de elementos que esta contiene. El tamaño de una matriz se puede especificar en el código o calcularse mediante el compilador.*
-#### [3.2. Vectores]()
+#### [3.2. Vectores](../src/vectores/src/main.rs)
 *Almacenan varios valores que tienen el mismo tipo de datos. A diferencia de las matrices, el tamaño o la longitud de un vector puede aumentar o reducirse en cualquier momento. La capacidad de cambiar el tamaño con el tiempo está implícita en tiempo de compilación. Por lo tanto, Rust no puede impedir que se acceda a una posición no válida en el vector como lo hace para el acceso en matrices fuera de los límites.*
 - Una manera común de declarar e inicializar un vector es con la macro vec!.
+#### [3.3. `if`/`else`](../src/if-else/src/main.rs)
