@@ -499,3 +499,171 @@ Rust usa este sistema para **garantizar la seguridad de memoria sin necesidad de
 
 ##### Anotación de las duraciones en tipos 
 Cada vez que un struct o una enumeración contienen una referencia en uno de sus campos, debemos anotar esa definición de tipo con la duración de cada referencia que lleve a cabo con ella.
+
+### 7. Tipos y rasgos genéricos
+#### 7.1. Tipos de datos genéricos
+Un tipo de datos genérico es un tipo que se define en términos de otros tipos parcialmente desconocidos. 
+Ejemplos 'implícitos':
+- La enumeración Option<T> es genérica con respecto al tipo T, que es el valor que contiene su variante Some.
+- El valor Result<T, E> es genérico tanto en el tipo correcto como en el error, que contiene sus variantes Ok y Err, respectivamente.
+- El tipo de vector Vec<T>, el tipo de matriz [T; n] y el mapa hash HashMap<K, V> son genéricos con respecto a los tipos que contienen.
+*Pueden existir mas de un tipo genérico*
+#### 7.2. Definición del comportamiento compartido con rasgos
+Un rasgo es una interfaz común que puede implementar un grupo de tipos.
+
+    💡 Podríamos verlo en typescript, como las --dev-deps que instalamos cuando hacemos @types/[...]
+
+Cada definición de rasgo es una colección de métodos definidos para un tipo desconocido, que normalmente representa una capacidad o un comportamiento que pueden realizar sus implementadores.
+
+Para implementar un rasgo para un tipo, usamos las palabras clave impl Trait for Type, donde Trait es el nombre del rasgo que se implementa y Type es el nombre de la estructura del implementador o la enumeración.
+
+Dentro del bloque impl, se colocan las signaturas de método que la definición de rasgo requiere y se rellena el cuerpo del método con el comportamiento específico que se quiere que tengan los métodos del rasgo para el tipo determinado.
+
+Cuando un tipo implementa un rasgo determinado, promete mantener su contrato. Después de implementar el rasgo, podemos llamar a los métodos en instancias de Circle y Rectangle de la misma forma que llamamos a métodos normales de la siguiente manera
+
+##### Uso de `self`
+<details>
+<summary> 💻 ChatGPT 🧑‍🏫 ➕ ❓</summary>
+
+📌 **¿Qué hace `&self` en un trait en Rust?**  
+
+En Rust, cuando definimos un **trait**, usamos `&self` dentro de los métodos para indicar que el método opera sobre una referencia al **propio objeto** que implementa el trait.  
+
+---
+
+📍 **Explicación de `&self` en el contexto de Traits**
+```rust
+trait Area {
+    fn area(&self) -> f64;
+}
+```
+🔹 `&self` es **una referencia inmutable** al objeto que implementa el trait.  
+🔹 Indica que la función **no modifica el estado interno del objeto**.  
+🔹 Permite que el método acceda a los datos internos de `self` sin tomar propiedad ni mutarlos.  
+
+---
+
+📍 **Ejemplo de Implementación**
+```rust
+struct Circulo {
+    radio: f64,
+}
+
+impl Area for Circulo {
+    fn area(&self) -> f64 {
+        3.14 * self.radio * self.radio
+    }
+}
+
+fn main() {
+    let c = Circulo { radio: 5.0 };
+    println!("Área del círculo: {}", c.area());
+}
+```
+🔹 `c.area()` llama al método `area` sin mover `c`, ya que `&self` solo toma una referencia.  
+🔹 No se puede modificar `self.radio` dentro de `area()` porque `&self` es inmutable.  
+
+---
+
+📍 **Otras Variaciones de `self` en Traits**
+| Variante      | Descripción |
+|--------------|-------------|
+| `fn area(self) -> f64` | Toma **propiedad** del objeto (lo consume). |
+| `fn area(&mut self) -> f64` | Toma una referencia **mutable**, permitiendo modificar `self`. |
+
+Ejemplo con `&mut self`:
+```rust
+trait Contador {
+    fn incrementar(&mut self);
+}
+
+struct Numero {
+    valor: i32,
+}
+
+impl Contador for Numero {
+    fn incrementar(&mut self) {
+        self.valor += 1;
+    }
+}
+```
+🔹 `&mut self` permite modificar `self.valor` dentro del método.  
+
+---
+
+📌 **Resumen**
+- `&self` en un trait indica que el método opera sobre **una referencia inmutable** del objeto.
+- Permite leer los datos sin tomar posesión ni modificar el estado del objeto.
+- Otras opciones incluyen `self` (consumo del objeto) y `&mut self` (permite mutación).  
+
+Si una función en un `trait` o `impl` toma **varios parámetros**, `self` sigue siendo obligatorio como primer parámetro (si el método opera sobre una instancia), pero los demás parámetros pueden tener cualquier nombre.  
+
+---
+
+ 📍 **Ejemplo con varios parámetros**
+```rust
+trait Calculadora {
+    fn suma(&self, a: i32, b: i32) -> i32;
+}
+```
+🔹 `&self` es el **primer parámetro obligatorio**.  
+🔹 `a` y `b` pueden tener **cualquier nombre válido**.  
+
+---
+
+ 📍 **Ejemplo con implementación**
+
+```rust
+struct Operacion;
+
+impl Calculadora for Operacion {
+    fn suma(&self, a: i32, b: i32) -> i32 {
+        a + b
+    }
+}
+
+fn main() {
+    let op = Operacion;
+    println!("Suma: {}", op.suma(5, 7));  // Output: Suma: 12
+}
+```
+📌 `op.suma(5, 7)` usa `&self` para acceder a la instancia `op`.  
+
+---
+
+ 📍 **Ejemplo con `&mut self` y varios parámetros**
+
+```rust
+trait Contador {
+    fn incrementar(&mut self, cantidad: i32);
+}
+
+struct Numero {
+    valor: i32,
+}
+
+impl Contador for Numero {
+    fn incrementar(&mut self, cantidad: i32) {
+        self.valor += cantidad;
+    }
+}
+
+fn main() {
+    let mut n = Numero { valor: 10 };
+    n.incrementar(5);
+    println!("Nuevo valor: {}", n.valor);  // Output: Nuevo valor: 15
+}
+```
+🔹 `&mut self` permite modificar `self.valor`.  
+🔹 `cantidad` es un parámetro adicional con **cualquier nombre válido**.  
+
+---
+
+ 📌 **Conclusión**
+- `self` sigue siendo **obligatorio como primer parámetro** si el método opera sobre la instancia.  
+- Los **demás parámetros** pueden llamarse como quieras (`a`, `cantidad`, `nombre`, etc.).  
+- `self` puede ser `self`, `&self` o `&mut self`, dependiendo de si necesitas **mover**, **prestar** o **modificar** la instancia. 🚀
+
+</details>
+
+#### [7.3. Uso del rasgo de derivación](../src/derivacion/src/main.rs)
