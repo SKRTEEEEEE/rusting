@@ -22,6 +22,7 @@ Con rustc podemos directamente compilar o ejecutar nuestro código
 Con cargo podemos crear el proyecto de carga y que el compile y ejecute el codigo por nosotros.
 - crear proyecto: `cargo new <nombre_archivo>`
 - compilar y ejecutar: `cargo run`
+
 ### 2. Rust introducción
 #### [2.1. primeras macros y variable let](../src/basic-structure/src/main.rs)
 - macros: `todo!()` y `println!()`
@@ -95,8 +96,6 @@ El tipo char es el más primitivo de los tipos de texto. El valor se especifica 
 *En estos escenarios, Rust tiene un segundo tipo de cadena denominado String. Este tipo se asigna en el montón* ('heap' en C++) *. Cuando se usa el tipo String, no es necesario conocer la longitud de la cadena (número de caracteres) antes de compilar el código.*
 
 *En realidad, Rust tiene más de dos tipos de cadena. En este módulo, solo se describen los tipos String y &str.*
-
-
 #### [2.5. colecciones de datos](../src/tuplas/src/main.rs)
 
 ##### tuplas
@@ -117,7 +116,6 @@ Para trabajar con estructuras en un programa con Rust, en primer lugar debe defi
 **Definición:**
 - Estructura Clásica: El cuerpo de una estructura clásica se define entre llaves {}. A cada campo de la estructura clásica se le asigna un nombre único dentro de la estructura. El tipo de cada campo se especifica con la sintaxis : <type>. Los campos de la estructura clásica se especifican como una lista separada por comas <field>, <field>, ....
 - Estructura Tupla:  el cuerpo de una estructura de tupla se define entre paréntesis (). Los paréntesis van inmediatamente después del nombre de la estructura. No hay espacio entre el nombre de la estructura y el paréntesis de apertura. A diferencia de una tupla, la definición de estructura de tupla incluye solo el tipo de datos de cada campo. Los tipos de datos de la estructura de tupla se especifican como una lista separada por comas <type>, <type>, ....
-
 #### [2.6. variantes `enum` para datos compuestos](../src/enumeracion/src/main.rs)
 
 *Las enumeraciones son tipos que pueden ser una de varias variantes. Lo que Rust denomina enumeraciones se conocen habitualmente como tipos de datos algebraicos. Lo importante es que cada variante de enumeración puede tener datos asociados.*
@@ -240,7 +238,6 @@ User {
 ```
 
 🔥 **Conclusión:** `#[derive(Debug)]` hace que puedas imprimir structs y enums de forma clara sin necesidad de escribir una implementación manual. 🚀
-
 #### [2.7. funciones](../src/funcs/src/main.rs)
 
 ### 3. Condiciones
@@ -254,6 +251,7 @@ User {
 ### 4. Bucles
 #### [4.1. Mapas hash](../src/hashmap/src/main.rs)
 #### [4.2. `loop`, `while` y `for`](../src/bucles/src/main.rs)
+
 ### 5. Errores
 #### 5.1. `panic!`
 El uso de alertas de pánico es el mecanismo más sencillo de control de errores de Rust.
@@ -269,7 +267,6 @@ fn main() {
 ```
 
     👁️ Rust entra en pánico en algunas operaciones, como una división por cero o un intento de acceder a un índice que no se ha enviado previamente en una matriz, un vector o un mapa hash
-
 #### [5.2. Option](../src/option/src/main.rs)
 La biblioteca estándar de Rust proporciona una enumeración Option<T> que se usa cuando la ausencia de un valor es una posibilidad.
 
@@ -322,3 +319,183 @@ El tipo Result también tiene los métodos unwrap y expect, los cuales:
 
 **`#[derive(Debug)]` es una macro que indica al compilador de Rust que convierta el tipo en imprimible con fines de depuración.**
 
+
+### 6. Memoria
+#### [6.1. Propiedad](../src/propiedad/src/main.rs)
+    👁️ En Rust, las "variables" se suelen denominar "enlaces". Esto se debe a que las "variables" de Rust no son muy variables: no cambian con frecuencia, ya que son inmutables de manera predeterminada. Por el contrario, a menudo pensamos que los nombres están "enlazados" a los datos, de ahí el nombre "enlace". En este módulo, usaremos los términos "variable" y "enlace" indistintamente.
+##### Reglas de ámbito
+Las variables solo son válidas dentro de un ámbito determinado. En Rust, los ámbitos normalmente se indican con llaves {}. Los ámbitos comunes incluyen cuerpos de función y ramas if, else y match.
+##### Anulación
+Cada vez que un objeto sale del ámbito, se "descarta". El descarte de una variable libera todo los recursos asociados a ella. En el caso de las variables de archivos, el archivo termina cerrado. En el caso de las variables que tienen asignada memoria asociada a ellas, se libera la memoria.
+##### Transferencia de recursos
+Cuando se quiere transferir la propiedad de un elemento de un enlace a otro.
+
+```rs
+{
+    let mascot = String::from("ferris");
+    // transfer ownership of mascot to the variable ferris.
+    let ferris = mascot;
+}
+// ferris is dropped here. The string data memory will be freed here.
+```
+
+**Una cuestión clave que se debe comprender es que, una vez transferida la propiedad, la variable antigua ya no es válida.**
+En Rust, "transferir la propiedad" se conoce como "mover".
+
+##### Propiedad en las funciones
+En Rust, la transferencia de propiedad (es decir, la transferencia) es el comportamiento predeterminado.
+
+##### Copia 'implícita'
+Los tipos simples como los número son tipos de copia. Implementan el rasgo `Copy`, lo que significa que se copian en lugar de moverse. La misma acción se produce para la mayoría de los tipos simples. La copia de números es muy económica, por lo que tiene sentido que estos valores se copien. La copia de cadenas o vectores, u otros tipos complejos, puede ser costosa, por lo que no implementan el rasgo `Copy` y, en su lugar, se mueven.
+##### Copia explícita `.clone()`
+Una llamada a .clone duplica la memoria y genera un nuevo valor. El nuevo valor se mueve, lo que significa que todavía se puede usar el valor anterior.
+
+    👁️ Este enfoque puede resultar útil, aunque puede ralentizar el código, ya que cada llamada a clone realiza una copia completa de los datos. Este método a menudo incluye asignaciones de memoria u otras operaciones costosas. Estos costos se pueden evitar si los valores "se toman prestados" mediante referencias.
+
+#### [6.2. Referencias](../src/referencias/src/main.rs)
+    🧠 Los valores tienen propietarios. Para transferir la propiedad de un valor, se cambia de una variable a otra. La propiedad no se puede transferir para los tipos que implementan el rasgo Copy, como para valores simples como números.
+    Los valores también se pueden copiar de forma explícita mediante el proceso de clonación. Se llama al método clone y se obtienen nuevos valores que se copian, lo que conserva los valores originales y permite seguir utilizándolos.
+
+Las referencias permiten "tomar prestados" valores sin convertirse en propietario de ellos.
+##### Prestamos mutables
+Con los préstamos &, conocidos como "préstamos inmutables", se pueden leer los datos, pero no cambiarlos. Con los préstamos de &mut, conocidos como "préstamos mutables", los datos se pueden leer y cambiar.
+
+    🧠 También necesitamos declarar el valor original como mutable
+
+##### **Limites**
+Al tomar prestado un valor de cualquier tipo T, se aplican las reglas siguientes:
+
+El código debe implementar cualquiera de las definiciones siguientes, pero no las dos al mismo tiempo:
+
+- Una o más referencias inmutables (&T)
+- Exactamente una referencia mutable (&mut T)
+
+*Se podría resumir como que: "Cuando usamos una referencia mutable (&mut T), no puede existir ninguna otra referencia (ni mutable ni inmutable) al mismo tiempo."*
+
+<details>
+<summary> 💻 ChatGPT 🧑‍🏫 ➕ ❓</summary>
+
+**Explicación:**
+
+1. **Varias referencias inmutables (`&T`) están permitidas** simultáneamente porque no modifican el valor original.
+2. **Una referencia mutable (`&mut T`) es exclusiva**, es decir, mientras exista una, no puede haber ninguna otra referencia (ni inmutable ni mutable).
+
+Ejemplo correcto:
+```rust
+fn main() {
+    let mut x = 10;
+
+    let r1 = &x;
+    let r2 = &x; // Se permite porque ambas son referencias inmutables
+
+    println!("r1: {}, r2: {}", r1, r2);
+}
+```
+
+Ejemplo incorrecto:
+```rust
+fn main() {
+    let mut x = 10;
+
+    let r1 = &x;
+    let r2 = &mut x; // ❌ Error: no puedes tener una referencia mutable mientras haya una inmutable
+
+    println!("r1: {}", r1);
+}
+```
+
+Ejemplo correcto con referencia mutable:
+```rust
+fn main() {
+    let mut x = 10;
+
+    {
+        let r = &mut x;
+        *r += 5; // Se permite porque `r` es la única referencia activa a `x`
+    } // `r` deja de existir aquí, liberando el acceso a `x`
+
+    let r2 = &x; // Se permite porque ya no hay referencia mutable activa
+    println!("x: {}", r2);
+}
+```
+
+**Resumen:**
+
+✔ **Múltiples referencias inmutables (`&T`) al mismo tiempo → OK**  
+✔ **Solo una referencia mutable (`&mut T`) y sin otras referencias al mismo tiempo → OK**  
+❌ **Referencia mutable y referencias inmutables coexistiendo → ERROR**  
+
+</details>
+
+#### [6.3. Validación de referencias mediante el uso de duraciones](../src/duraciones/src/main.rs)
+
+    🧠 PUNTERO COLGANTE: El uso de referencias plantea un problema. El elemento al que se refiere una referencia no realiza un seguimiento de todas sus referencias. Este comportamiento puede generar un problema: cuando se anula el elemento y sus recursos se liberan, ¿cómo se puede tener la seguridad de que no haya referencias que apunten a la memoria ya liberada (y, por tanto, no válida)?
+
+Rust elimina este problema. Garantiza que todas las referencias siempre se refieran a elementos válidos.   
+
+Las duraciones permiten que Rust garantice la seguridad de la memoria sin los costos de rendimiento de la recolección de elementos no utilizados.
+##### Anotación de las duraciones en funciones
+<details>
+<summary> 💻 ChatGPT 🧑‍🏫 ➕ ❓</summary>
+
+📌 **Resumen Teórico sobre Anotación de Lifetimes en Funciones en Rust**  
+
+Rust utiliza **anotaciones de tiempo de vida (`lifetimes`)** para garantizar la seguridad de memoria sin un recolector de basura. Estas anotaciones son necesarias cuando el compilador **no puede inferir automáticamente** la duración de las referencias en una función.
+
+---
+
+📍 **¿Por qué se necesitan Lifetimes en funciones?**  
+Cuando una función recibe referencias como parámetros y devuelve una referencia, Rust necesita saber cuánto tiempo debe vivir la referencia de retorno en relación con las referencias de entrada.  
+
+Si la duración de la referencia retornada no está clara, el compilador **restringe la compilación para evitar referencias colgantes**.
+
+---
+
+📍 **Reglas de Lifetimes en Funciones**
+
+1️⃣ **Si una función devuelve una referencia, debe asegurarse de que la referencia de retorno tenga una duración igual o menor que las referencias de entrada.**  
+2️⃣ **Si hay múltiples referencias de entrada, el lifetime debe especificar cuál de ellas se usará en la salida.**  
+3️⃣ **Cuando hay solo un parámetro de referencia, Rust puede inferir el lifetime en muchos casos, pero con múltiples referencias suele ser necesario anotarlo.**  
+
+---
+
+📍 **Casos en los que se requieren Lifetimes**
+✅ **Ejemplo donde es obligatorio usar un lifetime**
+```rust
+fn mayor<'a>(s1: &'a str, s2: &'a str) -> &'a str {
+    if s1.len() > s2.len() { s1 } else { s2 }
+}
+```
+🔹 Aquí `s1` y `s2` tienen el **mismo lifetime `'a`**, garantizando que la referencia retornada **no viva más** que ambas.  
+🔹 Sin el lifetime `'a`, el compilador no sabría cuál referencia sobrevive y daría un error.
+
+❌ **Ejemplo donde Rust infiere el lifetime (sin necesidad de anotarlo)**
+```rust
+fn longitud(s: &str) -> usize {
+    s.len() // No se devuelve una referencia, no necesita lifetime
+}
+```
+🔹 Como `s.len()` devuelve un `usize`, **no hay referencias en la salida**, por lo que **no se necesita un lifetime explícito**.
+
+✅ **Ejemplo donde Rust **no** puede inferir el lifetime automáticamente**
+```rust
+fn primera_palabra(s: &str) -> &str {
+    let palabras: Vec<&str> = s.split_whitespace().collect();
+    palabras[0] // ❌ Error: la referencia a `palabras` se elimina cuando la función termina.
+}
+```
+🔹 Aquí, la referencia retornada apunta a un vector local que **se elimina al salir de la función**, causando una referencia colgante.
+
+---
+
+📌 **Resumen Final**
+- Los **lifetimes en funciones** permiten garantizar que **las referencias devueltas sean válidas** durante el tiempo correcto.
+- Rust **puede inferir lifetimes** en algunos casos, pero cuando hay múltiples referencias en los parámetros y una referencia en la salida, **se requiere anotación manual**.
+- **Regla clave:** La referencia retornada **no puede vivir más que sus parámetros de entrada**.
+  
+Rust usa este sistema para **garantizar la seguridad de memoria sin necesidad de un recolector de basura**. 🚀
+
+</details>
+
+##### Anotación de las duraciones en tipos 
+Cada vez que un struct o una enumeración contienen una referencia en uno de sus campos, debemos anotar esa definición de tipo con la duración de cada referencia que lleve a cabo con ella.
