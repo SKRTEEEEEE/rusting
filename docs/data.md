@@ -253,3 +253,72 @@ User {
 
 ### 4. Bucles
 #### [4.1. Mapas hash](../src/hashmap/src/main.rs)
+#### [4.2. `loop`, `while` y `for`](../src/bucles/src/main.rs)
+### 5. Errores
+#### 5.1. `panic!`
+El uso de alertas de pánico es el mecanismo más sencillo de control de errores de Rust.
+
+Puede usar la macro panic! para emitir una alerta de pánico para el subproceso actual. La macro imprime un mensaje de error, libera recursos y, luego, sale del programa.
+
+En este sencillo ejemplo se muestra cómo llamar a la macro panic!:
+
+```rs
+fn main() {
+    panic!("Farewell!");
+}
+```
+
+    👁️ Rust entra en pánico en algunas operaciones, como una división por cero o un intento de acceder a un índice que no se ha enviado previamente en una matriz, un vector o un mapa hash
+
+#### [5.2. Option](../src/option/src/main.rs)
+La biblioteca estándar de Rust proporciona una enumeración Option<T> que se usa cuando la ausencia de un valor es una posibilidad.
+
+*En muchos otros lenguajes, la ausencia de un valor se modelaría con null o nil, pero Rust no usa null fuera del código que inter-opera con otros lenguajes. Rust es explícito acerca de cuándo un valor es opcional. Aunque en muchos lenguajes una función que toma String podría tomar String o null, en Rust esa misma función solo puede un elemento String real. Si quiere modelar una cadena opcional en Rust, debe encapsularla explícitamente en un atributo Option tipo Option<String>.*
+
+```rs
+enum Option<T> {
+    None,     // The value doesn't exist
+    Some(T),  // The value exists
+}
+```
+
+`None` y `Some` no son tipos sino variantes del tipo `Option<T>`, lo que significa, entre otras cosas, que las funciones no pueden tomar `Some` o `None` como argumentos, sino solo `Option<T>`.
+
+
+*El intento de acceder al índice no existente de un vector haría que el programa emitiera una alerta panic, sin embargo, podría evitarlo mediante el método Vec::get, que devuelve un tipo Option en lugar de un error. Si el valor existe en un índice especificado, se encapsula en la variante Option::Some(value). Si el índice está fuera de los límites, devolverá en cambio un valor Option::None.*
+
+##### `match`
+- Las secciones match se evalúan de arriba abajo. Los casos específicos se deben definir antes que los casos genéricos o nunca se buscará una coincidencia para ellos ni se evaluarán.
+- Las secciones match deben cubrir todos los valores posibles que pueda tener el tipo de entrada. Si intenta buscar coincidencias con una lista de patrones no exhaustiva, recibirá un error de compilador.
+##### `if let`
+Un operador if let compara un patrón con una expresión. Si la expresión coincide con el patrón, se ejecuta el bloque if. Lo bueno de la expresión if let es que no se necesita todo el código re-utilizable de una expresión match cuando solo interesa un patrón con el que buscar coincidencias.
+
+##### `unwrap`
+Puede intentar acceder al valor interno de un tipo Option directamente mediante el método unwrap. Sin embargo, tenga cuidado, ya que este método emitirá una alerta de pánico si la variante es None.
+##### `expect`
+El método expect hace lo mismo que unwrap, pero emite un mensaje de pánico personalizado que su segundo argumento proporciona
+##### `expect_or`
+    ⚠️ Como unwrap y expect pueden emitir alertas de pánico, no se recomienda usarlas. Use la coincidencia de patrones y administre el caso None explícitamente. O use metodos como `expect_or`.
+
+Devuelve un valor predeterminado si la variante es None o el valor interno si la variante es Some(value).
+#### 5.3. Result
+Rust proporciona la enumeración Result<T, E> para devolver y propagar errores. Por convención, la variante Ok(T) representa un acierto y contiene un valor, y la variante Err(E) representa un error y contiene un valor de error.
+
+La enumeración Result<T, E> se define como:
+
+```rs
+enum Result<T, E> {
+    Ok(T),  // A value T was obtained.
+    Err(E), // An error of type E was encountered instead.
+}
+```
+
+A diferencia del tipo Option, que describe la posibilidad de la ausencia de un valor, el tipo Result es más adecuado siempre que se puedan producir errores.
+
+El tipo Result también tiene los métodos unwrap y expect, los cuales:
+
+- Devuelven el valor dentro de la variante Ok.
+- Ocasionan alertas de pánico en el programa, si la variante es Err.
+
+**`#[derive(Debug)]` es una macro que indica al compilador de Rust que convierta el tipo en imprimible con fines de depuración.**
+
