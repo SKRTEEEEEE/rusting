@@ -667,3 +667,16 @@ fn main() {
 </details>
 
 #### [7.3. Uso del rasgo de derivación](../src/derivacion/src/main.rs)
+#### [7.4. Uso de límites de rasgos y funciones genéricas](../src/traits/src/main.rs)
+#### [7.5. Uso de iteradores](../src/iterador/src/main.rs)
+Todos los iteradores implementan un rasgo denominado `Iterator` que se define en la biblioteca estándar y se utiliza para implementar iteradores en colecciones tales como intervalos, matrices, vectores y mapas hash.
+```rs
+trait Iterator {
+    type Item;
+    fn next(&mut self) -> Option<Self::Item>;
+}
+```
+
+Un Iterator tiene un método, `next`, que cuando se llama devuelve un objeto `Option<Item>`. El método `next` devolverá `Some(Item)` siempre y cuando haya elementos. Una vez agotados todos, devolverá None para indicar que la iteración ha finalizado.
+
+En esta definición se usa una sintaxis nueva: type `Item` y `Self::Item`, que definen un tipo asociado a este rasgo.
