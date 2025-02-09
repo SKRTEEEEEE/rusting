@@ -17,7 +17,7 @@ Su gran competidor es GoLang.
 ## Tips
 ### No utilizar '-' para los nombres de los archivos
 Al utilizar '-', en los nombres de nuestros archivos, podemos incurrir en muchos errores:
-- Las libs no pueden ser referenciadas si contienen un guión en el nombre: [ver ejercicio_14](../src/ejercicio_14/src/lib.rs)
+- Las libs no pueden ser referenciadas si contienen un guión en el nombre: [ver ejercicio_14](../msft/ejercicio_14/src/lib.rs)
 
 
 
@@ -34,9 +34,9 @@ Con cargo podemos crear el proyecto de carga y que el compile y ejecute el codig
 - compilar y ejecutar: `cargo run`
 
 ### 2. Rust introducción
-#### [2.1. primeras macros y variable let](../src/basic-structure/src/main.rs)
+#### [2.1. primeras macros y variable let](../msft/basic-structure/src/main.rs)
 - macros: `todo!()` y `println!()`
-#### [2.2. mut](../src/mut-key/src/main.rs)
+#### [2.2. mut](../msft/mut-key/src/main.rs)
 #### 2.3. shadowing
 **Example**
 ```rs
@@ -78,7 +78,7 @@ Cada `let` crea una nueva variable en **stack**, y las versiones anteriores simp
 Si trabajas con **tipos en el heap**, como `Vec<String>`, y haces sombra de la variable en el mismo ámbito sin soltarla antes, puede que estés reteniendo memoria más de lo necesario. Pero en general, Rust maneja esto bien gracias a su **sistema de ownership y lifetimes**.  
 
 En resumen: **no hay fugas de memoria por el shadowing en Rust**, y en la mayoría de los casos, es seguro y útil. 🚀
-#### [2.4. tipos](../src/tipos-intro/src/main.rs)
+#### [2.4. tipos](../msft/tipos-intro/src/main.rs)
 *Rust es un lenguaje con establecimiento de tipos en modo estático. El compilador debe conocer el tipo de datos exacto de todas las variables del código para que el programa se compile y ejecute. Normalmente, el compilador puede inferir el tipo de datos de una variable en función del valor enlazado. No siempre es necesario indicar de forma explícita el tipo en el código. Cuando son posibles muchos tipos, debe informar al compilador del tipo específico mediante anotaciones de tipo.*
 ##### Tipos `escalares`
 Tipos de datos primitivos integrados para expresar números, texto y veracidad. Algunos de estos tipos se conocen como escalares, porque representan un solo valor:
@@ -106,7 +106,7 @@ El tipo char es el más primitivo de los tipos de texto. El valor se especifica 
 *En estos escenarios, Rust tiene un segundo tipo de cadena denominado String. Este tipo se asigna en el montón* ('heap' en C++) *. Cuando se usa el tipo String, no es necesario conocer la longitud de la cadena (número de caracteres) antes de compilar el código.*
 
 *En realidad, Rust tiene más de dos tipos de cadena. En este módulo, solo se describen los tipos String y &str.*
-#### [2.5. colecciones de datos](../src/tuplas/src/main.rs)
+#### [2.5. colecciones de datos](../msft/tuplas/src/main.rs)
 
 ##### tuplas
 
@@ -126,7 +126,7 @@ Para trabajar con estructuras en un programa con Rust, en primer lugar debe defi
 **Definición:**
 - Estructura Clásica: El cuerpo de una estructura clásica se define entre llaves {}. A cada campo de la estructura clásica se le asigna un nombre único dentro de la estructura. El tipo de cada campo se especifica con la sintaxis : <type>. Los campos de la estructura clásica se especifican como una lista separada por comas <field>, <field>, ....
 - Estructura Tupla:  el cuerpo de una estructura de tupla se define entre paréntesis (). Los paréntesis van inmediatamente después del nombre de la estructura. No hay espacio entre el nombre de la estructura y el paréntesis de apertura. A diferencia de una tupla, la definición de estructura de tupla incluye solo el tipo de datos de cada campo. Los tipos de datos de la estructura de tupla se especifican como una lista separada por comas <type>, <type>, ....
-#### [2.6. variantes `enum` para datos compuestos](../src/enumeracion/src/main.rs)
+#### [2.6. variantes `enum` para datos compuestos](../msft/enumeracion/src/main.rs)
 
 *Las enumeraciones son tipos que pueden ser una de varias variantes. Lo que Rust denomina enumeraciones se conocen habitualmente como tipos de datos algebraicos. Lo importante es que cada variante de enumeración puede tener datos asociados.*
 
@@ -248,19 +248,19 @@ User {
 ```
 
 🔥 **Conclusión:** `#[derive(Debug)]` hace que puedas imprimir structs y enums de forma clara sin necesidad de escribir una implementación manual. 🚀
-#### [2.7. funciones](../src/funcs/src/main.rs)
+#### [2.7. funciones](../msft/funcs/src/main.rs)
 
 ### 3. Condiciones
-#### [3.1. Matrices](../src/matriz/src/main.rs) 
+#### [3.1. Matrices](../msft/matriz/src/main.rs) 
 *Colección de objetos del mismo tipo, que se almacenan secuencial-mente en la memoria. La longitud o tamaño de una matriz es igual al número de elementos que esta contiene. El tamaño de una matriz se puede especificar en el código o calcularse mediante el compilador.*
-#### [3.2. Vectores](../src/vectores/src/main.rs)
+#### [3.2. Vectores](../msft/vectores/src/main.rs)
 *Almacenan varios valores que tienen el mismo tipo de datos. A diferencia de las matrices, el tamaño o la longitud de un vector puede aumentar o reducirse en cualquier momento. La capacidad de cambiar el tamaño con el tiempo está implícita en tiempo de compilación. Por lo tanto, Rust no puede impedir que se acceda a una posición no válida en el vector como lo hace para el acceso en matrices fuera de los límites.*
 - Una manera común de declarar e inicializar un vector es con la macro vec!.
-#### [3.3. `if`/`else`](../src/if-else/src/main.rs)
+#### [3.3. `if`/`else`](../msft/if-else/src/main.rs)
 
 ### 4. Bucles
-#### [4.1. Mapas hash](../src/hashmap/src/main.rs)
-#### [4.2. `loop`, `while` y `for`](../src/bucles/src/main.rs)
+#### [4.1. Mapas hash](../msft/hashmap/src/main.rs)
+#### [4.2. `loop`, `while` y `for`](../msft/bucles/src/main.rs)
 
 ### 5. Errores
 #### 5.1. `panic!`
@@ -277,7 +277,7 @@ fn main() {
 ```
 
     👁️ Rust entra en pánico en algunas operaciones, como una división por cero o un intento de acceder a un índice que no se ha enviado previamente en una matriz, un vector o un mapa hash
-#### [5.2. Option](../src/option/src/main.rs)
+#### [5.2. Option](../msft/option/src/main.rs)
 La biblioteca estándar de Rust proporciona una enumeración Option<T> que se usa cuando la ausencia de un valor es una posibilidad.
 
 *En muchos otros lenguajes, la ausencia de un valor se modelaría con null o nil, pero Rust no usa null fuera del código que inter-opera con otros lenguajes. Rust es explícito acerca de cuándo un valor es opcional. Aunque en muchos lenguajes una función que toma String podría tomar String o null, en Rust esa misma función solo puede un elemento String real. Si quiere modelar una cadena opcional en Rust, debe encapsularla explícitamente en un atributo Option tipo Option<String>.*
@@ -331,7 +331,7 @@ El tipo Result también tiene los métodos unwrap y expect, los cuales:
 
 
 ### 6. Memoria
-#### [6.1. Propiedad](../src/propiedad/src/main.rs)
+#### [6.1. Propiedad](../msft/propiedad/src/main.rs)
     👁️ En Rust, las "variables" se suelen denominar "enlaces". Esto se debe a que las "variables" de Rust no son muy variables: no cambian con frecuencia, ya que son inmutables de manera predeterminada. Por el contrario, a menudo pensamos que los nombres están "enlazados" a los datos, de ahí el nombre "enlace". En este módulo, usaremos los términos "variable" y "enlace" indistintamente.
 ##### Reglas de ámbito
 Las variables solo son válidas dentro de un ámbito determinado. En Rust, los ámbitos normalmente se indican con llaves {}. Los ámbitos comunes incluyen cuerpos de función y ramas if, else y match.
@@ -362,7 +362,7 @@ Una llamada a .clone duplica la memoria y genera un nuevo valor. El nuevo valor 
 
     👁️ Este enfoque puede resultar útil, aunque puede ralentizar el código, ya que cada llamada a clone realiza una copia completa de los datos. Este método a menudo incluye asignaciones de memoria u otras operaciones costosas. Estos costos se pueden evitar si los valores "se toman prestados" mediante referencias.
 
-#### [6.2. Referencias](../src/referencias/src/main.rs)
+#### [6.2. Referencias](../msft/referencias/src/main.rs)
     🧠 Los valores tienen propietarios. Para transferir la propiedad de un valor, se cambia de una variable a otra. La propiedad no se puede transferir para los tipos que implementan el rasgo Copy, como para valores simples como números.
     Los valores también se pueden copiar de forma explícita mediante el proceso de clonación. Se llama al método clone y se obtienen nuevos valores que se copian, lo que conserva los valores originales y permite seguir utilizándolos.
 
@@ -437,7 +437,7 @@ fn main() {
 
 </details>
 
-#### [6.3. Validación de referencias mediante el uso de duraciones](../src/duraciones/src/main.rs)
+#### [6.3. Validación de referencias mediante el uso de duraciones](../msft/duraciones/src/main.rs)
 
     🧠 PUNTERO COLGANTE: El uso de referencias plantea un problema. El elemento al que se refiere una referencia no realiza un seguimiento de todas sus referencias. Este comportamiento puede generar un problema: cuando se anula el elemento y sus recursos se liberan, ¿cómo se puede tener la seguridad de que no haya referencias que apunten a la memoria ya liberada (y, por tanto, no válida)?
 
@@ -676,9 +676,9 @@ fn main() {
 
 </details>
 
-#### [7.3. Uso del rasgo de derivación](../src/derivacion/src/main.rs)
-#### [7.4. Uso de límites de rasgos y funciones genéricas](../src/traits/src/main.rs)
-#### [7.5. Uso de iteradores](../src/iterador/src/main.rs)
+#### [7.3. Uso del rasgo de derivación](../msft/derivacion/src/main.rs)
+#### [7.4. Uso de límites de rasgos y funciones genéricas](../msft/traits/src/main.rs)
+#### [7.5. Uso de iteradores](../msft/iterador/src/main.rs)
 Todos los iteradores implementan un rasgo denominado `Iterator` que se define en la biblioteca estándar y se utiliza para implementar iteradores en colecciones tales como intervalos, matrices, vectores y mapas hash.
 ```rs
 trait Iterator {
@@ -710,10 +710,10 @@ Para crear una biblioteca, pase el parámetro --lib de la línea de comandos al 
 Cuando indique a Cargo que compile este contenedor, obtendrá un archivo de biblioteca denominado libmy_library.rlib que se puede publicar y vincular a otros proyectos.
 **Módulos**
 Se puede usar para dividir jerárquicamente el código en unidades lógicas que también facilitan la lectura y la reutilización. Los módulos también controlan la privacidad del elemento.
-#### [8.2. División del código en módulos](../src/modulos/src/main.rs)
-#### [8.3. Separación de módulos en archivos diferentes](../src/modulos-separados/src/main.rs)
+#### [8.2. División del código en módulos](../msft/modulos/src/main.rs)
+#### [8.3. Separación de módulos en archivos diferentes](../msft/modulos-separados/src/main.rs)
 *Continuación del apartado 8.2.*
-#### [8.4. Adición de contenedores de terceros a un proyecto](../src/contenedores/src/main.rs)
+#### [8.4. Adición de contenedores de terceros a un proyecto](../msft/contenedores/src/main.rs)
 La biblioteca estándar de Rust no tiene un módulo para expresiones regulares, así que vamos a agregar el contenedor `regex` que está disponible en crates.io. Este sitio web es el registro de paquetes central de la comunidad de Rust y sirve como una ubicación para buscar y descargar paquetes.
 
 Siempre que queramos agregar contenedores dependientes a nuestro proyecto, podemos confiar todo el trabajo pesado a Cargo. Para depender de una biblioteca hospedada en [crates.io](https://crates.io/), agréguela al archivo `Cargo.toml`:
@@ -728,7 +728,7 @@ Si su archivo `Cargo.toml` aún no tiene una sección `[dependencies]`, agrégue
 El siguiente paso consiste en ejecutar el comando `cargo build`. Cargo recuperará la nueva dependencia y todas sus dependencias, y las compilará todas
 
 ### 9. Pruebas automatizadas
-#### [9.1. Escribir pruebas unitarias](../src/escribir-test/src/main.rs)
+#### [9.1. Escribir pruebas unitarias](../msft/escribir-test/src/main.rs)
 Las pruebas unitarias en Rust son funciones simples marcadas con el atributo `#[test]` que comprueban que el código que no es de prueba funciona de la manera esperada. Estas funciones solo se compilan cuando se prueba el código.
 
 Las funciones de prueba ejecutan el código que desea probar. Luego, comprueban los resultados, a menudo mediante las macros `assert!` o `assert_eq!`.
@@ -747,14 +747,14 @@ El atributo `[ignore]` se puede escribir opcionalmente junto con un motivo para 
 *El atributo cfg controla la compilación condicional y solo compilará el elemento al que está asociado si el predicado es true. Cargo emite automáticamente la marca de compilación test siempre que se ejecuta el comando $ cargo test, por lo que el predicado siempre será true cuando se ejecuten las pruebas.*
 
 La declaración `use super::*`; es necesaria para que el código del módulo pueda acceder a la función add en el módulo externo.
-#### [9.2. Escritura de pruebas de documentación](../src/docu-test/src/lib.rs)
+#### [9.2. Escritura de pruebas de documentación](../msft/docu-test/src/lib.rs)
 Con Rust, puede ejecutar ejemplos de documentación como pruebas. La forma principal de documentar una biblioteca de Rust es mediante la anotación del código fuente con barras diagonales triples (///), lo que se conoce como comentarios de documentación. Los comentarios de documentación se escriben en Markdown y admiten bloques de código, de modo que estos bloques de código se compilan y se usan como pruebas.
 
 Para probar esta característica, primero debe crear un nuevo proyecto de biblioteca utilizando: `cargo new --lib <nombre_libreria>`
 
 - Ejecutar test documentación: `cargo test` o `cargo t`
 
-#### [9.3. Escritura de pruebas de integración](../src/integracion_tests)
+#### [9.3. Escritura de pruebas de integración](../msft/integracion_tests)
 Las pruebas unitarias y de documentación proporcionan pruebas concisas y específicas. Pero también es una buena idea probar nuestro contenedor como un todo. Luego, podemos confirmar que los distintos elementos de código del contenedor funcionan juntos según lo previsto.
 
 Para probar nuestro contenedor como un todo, podemos usar pruebas de integración. El conjunto de pruebas con Rust admite este tipo de prueba, que solo llama a las funciones que contiene la API pública de nuestra biblioteca. Podemos usar pruebas de integración para comprobar cómo funciona nuestro código cuando otros lo usan.
