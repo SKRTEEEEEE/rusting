@@ -761,6 +761,15 @@ Para probar nuestro contenedor como un todo, podemos usar pruebas de integració
 
 La característica exclusiva de estas pruebas es que se encuentran en un directorio y un archivo independientes, por lo que se pueden usar para probar externamente el código de la biblioteca. Al ejecutar pruebas de integración con Cargo, colóquelas en un directorio de `tests`. Cargo ejecuta cada archivo de origen en este directorio. Cree `tests` en el directorio del proyecto, en el mismo nivel que el directorio src.
 
+## Proyecto Final
+### Contenedores de terceros
+#### [structopt](https://crates.io/crates/structopt)
+Para analizar y controlar los argumentos de la línea de comandos.
 
+- Comprobar si está disponible y determinar la versión más reciente: `cargo search structopt`
+### Acciones del programa
+- Agregar una tarea.
+- Quitar una tarea.
+- Imprimir la lista de tareas.
 
 
