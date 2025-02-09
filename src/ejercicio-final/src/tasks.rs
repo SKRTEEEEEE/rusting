@@ -32,8 +32,32 @@ impl Task {
     //4. Añadir funciones
     use std::io::Result;
     use std::path::PathBuf;
+    //La función add_task tiene que anexar un nuevo valor Task a una colección de tareas posiblemente existente que está codificada en un archivo JSON. Por lo tanto, antes de insertar una tarea en esa colección, primero debemos leer ese archivo y ensamblar un vector de tareas a partir de su contenido.
+    pub fn add_task(journal_path: PathBuf, task: Task) -> Result<()> { 
+         // Open the file.
+        let mut file = OpenOptions::new()
+        .read(true)
+        .write(true)
+        .create(true)
+        .open(journal_path)?;
 
-    pub fn add_task(journal_path: PathBuf, task: Task) -> Result<()> { ... }
+        // Consume the file's contents as a vector of tasks.
+        let mut tasks: Vec<Task> = match serde_json::from_reader(&file) {
+            Ok(tasks) => tasks,
+            Err(e) if e.is_eof() => Vec::new(),
+            Err(e) => Err(e)?,
+        };
+
+        // Rewind the file after reading from it.
+        file.seek(SeekFrom::Start(0))?;
+
+        // Write the modified task list back into the file.
+        tasks.push(task);
+        serde_json::to_writer(file, &tasks)?;
+
+        Ok(())
+
+     }
 
     pub fn complete_task(journal_path: PathBuf, task_position: usize) -> Result<()> { ... }
 
