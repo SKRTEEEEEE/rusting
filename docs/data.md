@@ -680,3 +680,41 @@ trait Iterator {
 Un Iterator tiene un método, `next`, que cuando se llama devuelve un objeto `Option<Item>`. El método `next` devolverá `Some(Item)` siempre y cuando haya elementos. Una vez agotados todos, devolverá None para indicar que la iteración ha finalizado.
 
 En esta definición se usa una sintaxis nueva: type `Item` y `Self::Item`, que definen un tipo asociado a este rasgo.
+
+### 8. Módulos, paquetes y contenedores de terceros
+#### 8.1. Conceptos básicos
+- Un paquete:
+    - Contiene funcionalidad dentro de uno o más contenedores.
+    - Incluye información sobre cómo crear esos contenedores. La información está en el archivo Cargo.toml.
+    - *Cuando ejecutamos `cargo new <project_name>`, estamos creando un paquete.*
+- Un contenedor:
+    - Es una unidad de compilación, que es la cantidad más pequeña de código en la que puede operar el compilador de Rust.
+    - Una vez compilado, genera un archivo ejecutable o una biblioteca.
+    - Contiene un módulo de nivel superior implícito y sin nombre.
+- Un módulo:
+    - Es una unidad (posiblemente anidada) de organización de código dentro de un contenedor.
+    - Puede tener definiciones recursivas que abarcan módulos adicionales.
+**Contenedores de bibliotecas**
+Para crear una biblioteca, pase el parámetro --lib de la línea de comandos al comando cargo new.
+
+Cuando indique a Cargo que compile este contenedor, obtendrá un archivo de biblioteca denominado libmy_library.rlib que se puede publicar y vincular a otros proyectos.
+**Módulos**
+Se puede usar para dividir jerárquicamente el código en unidades lógicas que también facilitan la lectura y la reutilización. Los módulos también controlan la privacidad del elemento.
+#### [8.2. División del código en módulos](../src/modulos/src/main.rs)
+#### [8.3. Separación de módulos en archivos diferentes](../src/modulos-separados/src/main.rs)
+*Continuación del apartado 8.2.*
+#### [8.4. Adición de contenedores de terceros a un proyecto]
+La biblioteca estándar de Rust no tiene un módulo para expresiones regulares, así que vamos a agregar el contenedor `regex` que está disponible en crates.io. Este sitio web es el registro de paquetes central de la comunidad de Rust y sirve como una ubicación para buscar y descargar paquetes.
+
+Siempre que queramos agregar contenedores dependientes a nuestro proyecto, podemos confiar todo el trabajo pesado a Cargo. Para depender de una biblioteca hospedada en [crates.io](https://crates.io/), agréguela al archivo `Cargo.toml`:
+
+```toml
+[dependencies]
+regex = "1.4.2"
+```
+
+Si su archivo `Cargo.toml` aún no tiene una sección `[dependencies]`, agréguela. Después, enumere el nombre del contenedor y la versión que quiere usar.
+
+El siguiente paso consiste en ejecutar el comando `cargo build`. Cargo recuperará la nueva dependencia y todas sus dependencias, y las compilará todas
+
+
