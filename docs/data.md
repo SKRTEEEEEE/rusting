@@ -782,6 +782,12 @@ Contenedor que puede usar si necesita controlar los datos de fecha y hora en Rus
 #### `serde_json` y `serde`
 - `serde`. El contenedor base que permitirá a nuestros tipos derivar los rasgos Serialize y Deserialize.
 - `serde_json`. El contenedor que implementará esos rasgos en el formato de especificación de archivo elegido, JSON.
+#### `home`
+Dado que los directorios de inicio varían según el sistema operativo del usuario, se confiará en un contenedor de terceros llamado home para determinar el directorio.
+
+#### `anyhow`
+Contenedor para mostrar errores útiles y atractivos a los usuario. Proporciona su propio tipo de error. Este tipo tiene propiedades de impresión atractivas y se puede convertir fácilmente a partir de otros errores.
+
 ### Acciones del programa
 - Agregar una tarea.
 - Quitar una tarea.

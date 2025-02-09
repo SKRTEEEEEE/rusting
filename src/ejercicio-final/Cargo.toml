@@ -4,6 +4,8 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+anyhow = "1.0"  # Add 'anyhow'
+home = "0.5"    # Add `home` to our project
 serde_json = "1.0"    # Add serde_json.
 structopt = "0.3"
 
