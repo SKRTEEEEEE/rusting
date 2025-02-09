@@ -760,13 +760,28 @@ Las pruebas unitarias y de documentación proporcionan pruebas concisas y espec�
 Para probar nuestro contenedor como un todo, podemos usar pruebas de integración. El conjunto de pruebas con Rust admite este tipo de prueba, que solo llama a las funciones que contiene la API pública de nuestra biblioteca. Podemos usar pruebas de integración para comprobar cómo funciona nuestro código cuando otros lo usan.
 
 La característica exclusiva de estas pruebas es que se encuentran en un directorio y un archivo independientes, por lo que se pueden usar para probar externamente el código de la biblioteca. Al ejecutar pruebas de integración con Cargo, colóquelas en un directorio de `tests`. Cargo ejecuta cada archivo de origen en este directorio. Cree `tests` en el directorio del proyecto, en el mismo nivel que el directorio src.
+### 10. Proyecto final
+#### 10.1. Serialización y deserialización de tareas mediante `serde_json`
+Cuando necesitemos conservar las estructuras e instancias de enumeraciones, debemos pensar en la serialización. Cuando necesitemos devolver esos datos a un programa, hablaremos de deserialización.
+
+La serialización y deserialización son los procesos de almacenar datos en una secuencia de bytes y, luego, recuperarlos para usarlos posteriormente, sin pérdida de información. Después, puede enviar esos bytes a través de una conexión o almacenarlos en un archivo en un dispositivo de almacenamiento.
+
+    ⚠️ La comunidad de Rust recomienda el contenedor `serde` para controlar la mayoría de la serialización y deserialización de las estructuras de datos de Rust de forma eficaz y genérica
+
+
 
 ## Proyecto Final
 ### Contenedores de terceros
-#### [structopt](https://crates.io/crates/structopt)
+#### [`structopt`](https://crates.io/crates/structopt)
 Para analizar y controlar los argumentos de la línea de comandos.
 
 - Comprobar si está disponible y determinar la versión más reciente: `cargo search structopt`
+#### `chrono`
+Contenedor que puede usar si necesita controlar los datos de fecha y hora en Rust. Este contenedor proporciona una API sencilla para representar un momento dado.
+
+#### `serde_json` y `serde`
+- `serde`. El contenedor base que permitirá a nuestros tipos derivar los rasgos Serialize y Deserialize.
+- `serde_json`. El contenedor que implementará esos rasgos en el formato de especificación de archivo elegido, JSON.
 ### Acciones del programa
 - Agregar una tarea.
 - Quitar una tarea.
