@@ -12,6 +12,16 @@ Su gran competidor es GoLang.
 
 - [Basado en este curso](https://learn.microsoft.com/es-es/training/paths/rust-first-steps/?source=learn)
 
+
+
+## Tips
+### No utilizar '-' para los nombres de los archivos
+Al utilizar '-', en los nombres de nuestros archivos, podemos incurrir en muchos errores:
+- Las libs no pueden ser referenciadas si contienen un guión en el nombre: [ver ejercicio_14](../src/ejercicio_14/src/lib.rs)
+
+
+
+
 ## Teoría
 ### 1. Compilando y ejecutando
 #### 1.1. rustc
@@ -703,7 +713,7 @@ Se puede usar para dividir jerárquicamente el código en unidades lógicas que 
 #### [8.2. División del código en módulos](../src/modulos/src/main.rs)
 #### [8.3. Separación de módulos en archivos diferentes](../src/modulos-separados/src/main.rs)
 *Continuación del apartado 8.2.*
-#### [8.4. Adición de contenedores de terceros a un proyecto]
+#### [8.4. Adición de contenedores de terceros a un proyecto](../src/contenedores/src/main.rs)
 La biblioteca estándar de Rust no tiene un módulo para expresiones regulares, así que vamos a agregar el contenedor `regex` que está disponible en crates.io. Este sitio web es el registro de paquetes central de la comunidad de Rust y sirve como una ubicación para buscar y descargar paquetes.
 
 Siempre que queramos agregar contenedores dependientes a nuestro proyecto, podemos confiar todo el trabajo pesado a Cargo. Para depender de una biblioteca hospedada en [crates.io](https://crates.io/), agréguela al archivo `Cargo.toml`:
@@ -716,5 +726,41 @@ regex = "1.4.2"
 Si su archivo `Cargo.toml` aún no tiene una sección `[dependencies]`, agréguela. Después, enumere el nombre del contenedor y la versión que quiere usar.
 
 El siguiente paso consiste en ejecutar el comando `cargo build`. Cargo recuperará la nueva dependencia y todas sus dependencias, y las compilará todas
+
+### 9. Pruebas automatizadas
+#### [9.1. Escribir pruebas unitarias](../src/escribir-test/src/main.rs)
+Las pruebas unitarias en Rust son funciones simples marcadas con el atributo `#[test]` que comprueban que el código que no es de prueba funciona de la manera esperada. Estas funciones solo se compilan cuando se prueba el código.
+
+Las funciones de prueba ejecutan el código que desea probar. Luego, comprueban los resultados, a menudo mediante las macros `assert!` o `assert_eq!`.
+
+- Ejecutar test: `cargo test` o `cargo t`
+##### Errores esperados
+En muchos escenarios, es importante probar si una condición producirá una función `panic!`.
+
+El atributo `should_panic` permite comprobar si hay un `panic!`. Si agregamos este atributo a nuestra función de prueba, la prueba se supera cuando el código de la función entra en pánico. Se produce un error en la prueba cuando el código no entra en pánico.
+##### Omisión de pruebas
+Una función anotada con el atributo `[test]` también se puede anotar con el atributo `[ignore]`. Este atributo hace que se omita la función de prueba durante las pruebas.
+
+El atributo `[ignore]` se puede escribir opcionalmente junto con un motivo para la omisión de la prueba.
+
+##### Módulo de prueba
+*El atributo cfg controla la compilación condicional y solo compilará el elemento al que está asociado si el predicado es true. Cargo emite automáticamente la marca de compilación test siempre que se ejecuta el comando $ cargo test, por lo que el predicado siempre será true cuando se ejecuten las pruebas.*
+
+La declaración `use super::*`; es necesaria para que el código del módulo pueda acceder a la función add en el módulo externo.
+#### [9.2. Escritura de pruebas de documentación](../src/docu-test/src/lib.rs)
+Con Rust, puede ejecutar ejemplos de documentación como pruebas. La forma principal de documentar una biblioteca de Rust es mediante la anotación del código fuente con barras diagonales triples (///), lo que se conoce como comentarios de documentación. Los comentarios de documentación se escriben en Markdown y admiten bloques de código, de modo que estos bloques de código se compilan y se usan como pruebas.
+
+Para probar esta característica, primero debe crear un nuevo proyecto de biblioteca utilizando: `cargo new --lib <nombre_libreria>`
+
+- Ejecutar test documentación: `cargo test` o `cargo t`
+
+#### [9.3. Escritura de pruebas de integración](../src/integracion_tests)
+Las pruebas unitarias y de documentación proporcionan pruebas concisas y específicas. Pero también es una buena idea probar nuestro contenedor como un todo. Luego, podemos confirmar que los distintos elementos de código del contenedor funcionan juntos según lo previsto.
+
+Para probar nuestro contenedor como un todo, podemos usar pruebas de integración. El conjunto de pruebas con Rust admite este tipo de prueba, que solo llama a las funciones que contiene la API pública de nuestra biblioteca. Podemos usar pruebas de integración para comprobar cómo funciona nuestro código cuando otros lo usan.
+
+La característica exclusiva de estas pruebas es que se encuentran en un directorio y un archivo independientes, por lo que se pueden usar para probar externamente el código de la biblioteca. Al ejecutar pruebas de integración con Cargo, colóquelas en un directorio de `tests`. Cargo ejecuta cada archivo de origen en este directorio. Cree `tests` en el directorio del proyecto, en el mismo nivel que el directorio src.
+
+
 
 
